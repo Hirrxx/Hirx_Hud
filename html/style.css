@@ -1,0 +1,500 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.hud-root {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.hud-root.is-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.hud-surface {
+    background: rgba(8, 8, 10, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.85),
+        0 3px 10px rgba(0, 0, 0, 0.65);
+    color: #ffffff;
+}
+
+.icon {
+    width: 15px;
+    height: 15px;
+    fill: #ffffff;
+    display: block;
+}
+
+.icon-sm {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    display: block;
+}
+
+.icon-xs {
+    width: 13px;
+    height: 13px;
+    fill: #ffffff;
+    display: block;
+    flex-shrink: 0;
+}
+
+.icon-xs.muted {
+    fill: rgba(255, 255, 255, 0.8);
+}
+
+.v-sep {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.v-sep-lg {
+    width: 1px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.gear-pill {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    letter-spacing: 0.03em;
+}
+
+/* Visibilidad de layouts segun el estilo activo */
+.layout-minimal,
+.layout-rings,
+.layout-tactical {
+    display: none;
+}
+
+.hud-root.style-minimal .layout-minimal {
+    display: block;
+}
+
+.hud-root.style-rings .layout-rings {
+    display: block;
+}
+
+.hud-root.style-tactical .layout-tactical {
+    display: block;
+}
+
+/* Ocultar velocimetro cuando no esta en vehiculo */
+.hud-root.no-speedo .minimal-speedo,
+.hud-root.no-speedo .rings-speedo {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.hud-root.no-speedo .t-speedo-wrap {
+    display: none;
+}
+
+/* =========================================================
+   ESTILO 1: MINIMAL
+   ========================================================= */
+.minimal-status {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    border-radius: 10px;
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.m-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.m-track {
+    width: 28px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.m-fill {
+    height: 100%;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 999px;
+    transition: width 0.22s ease;
+}
+
+.voice-wrap {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.voice-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.78);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.voice-circle.is-talking {
+    background: #ffffff;
+    color: #08080a;
+    border-color: #ffffff;
+}
+
+.voice-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+}
+
+.vb {
+    width: 3.5px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.25);
+    transition: background-color 0.15s ease;
+}
+
+.vb-1 { height: 6px; }
+.vb-2 { height: 11px; }
+.vb-3 { height: 16px; }
+.vb.active { background: #ffffff; }
+
+.minimal-speedo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    min-width: 168px;
+    border-radius: 10px;
+    padding: 9px 15px 10px;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.ms-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ms-speed {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+.speed-num {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.speed-unit {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ms-track {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.ms-fill {
+    height: 100%;
+    width: 0%;
+    background: #ffffff;
+    border-radius: 999px;
+    transition: width 0.12s linear;
+}
+
+/* =========================================================
+   ESTILO 2: RINGS
+   ========================================================= */
+.rings-status {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ring-card {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ring-svg {
+    width: 44px;
+    height: 44px;
+    transform: rotate(-90deg);
+}
+
+.ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 2.8;
+}
+
+.ring-fg {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    stroke-dasharray: 100.53;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.22s ease;
+}
+
+.ring-icon {
+    position: absolute;
+}
+
+.voice-ring-card {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.voice-ring-card.is-talking {
+    border-color: rgba(255, 255, 255, 0.85);
+    box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.35),
+        0 10px 28px rgba(0, 0, 0, 0.85);
+}
+
+.rings-speedo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.arc-svg {
+    width: 110px;
+    height: 110px;
+    transform: rotate(135deg);
+}
+
+.arc-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.14);
+    stroke-width: 6;
+    stroke-dasharray: 198 264;
+    stroke-linecap: round;
+}
+
+.arc-fg {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 6;
+    stroke-dasharray: 198 264;
+    stroke-dashoffset: 198;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.12s linear;
+}
+
+.arc-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 6px;
+}
+
+.arc-speed {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.arc-unit {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 3px;
+}
+
+.arc-gear {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.88);
+    margin-top: 2px;
+}
+
+/* =========================================================
+   ESTILO 3: TACTICAL (Dock centro-abajo)
+   ========================================================= */
+.tactical-dock {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    padding: 9px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.t-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 220px;
+}
+
+.t-top-bars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.t-bar-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.t-track {
+    flex: 1;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.t-fill {
+    height: 100%;
+    width: 100%;
+    background: #ffffff;
+    transition: width 0.22s ease;
+}
+
+.t-fill-muted {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.t-bottom-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.t-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.t-speedo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.t-speedo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.t-speed-line {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.t-speed-num {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.t-speed-unit {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.t-speed-track {
+    width: 92px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.t-speed-fill {
+    height: 100%;
+    width: 0%;
+    background: #ffffff;
+    transition: width 0.12s linear;
+}
